@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "parallel": 6,
+  "release": {
+    "projects": ["packages/*"],
+    "version": {
+      "preVersionCommand": "pnpm exec nx run-many -t build",
+      "conventionalCommits": true,
+      "fallbackCurrentVersionResolver": "disk",
+      "preserveLocalDependencyProtocols": false
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/types"]
+    },
+    "build:site": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["{workspaceRoot}/examples/**/*", "{projectRoot}/**/*"],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/.next",
+        "{projectRoot}/.source",
+        "{projectRoot}/content/examples",
+        "{projectRoot}/components/example/generated"
+      ]
+    },
+    "test": {
+      "cache": true,
+      "dependsOn": ["^test"]
+    },
+    "lint": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "e2e": {
+      "cache": true,
+      "dependsOn": ["^e2e"]
+    }
+  }
+}
